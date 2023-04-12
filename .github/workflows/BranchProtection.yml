@@ -15,12 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
     
-      - name: Create Repository with branch protection
+      - name: Branch protection
         run: |     
             while IFS=',' read -r REPO_NAME; do
               echo "Repo: $REPO_NAME"
               echo "url: https://api.github.com/repos/${{ env.ORG_NAME }}/$REPO_NAME/branches/main/protection"
-              
+
               curl --location --request PUT "https://api.github.com/repos/${{ env.ORG_NAME }}/$REPO_NAME/branches/main/protection" \
               --header "Accept: application/vnd.github.luke-cage-preview+json" \
               --header "Authorization: token ${{ secrets.ORG_ADMIN_TOKEN }}" \
@@ -36,7 +36,7 @@ jobs:
               }, 
               "restrictions": null
               }'             
-            done < <(repos.csv)
+            done < <(cat repos.csv)
 
             
       - name: Upload CSV artifact
